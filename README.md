@@ -100,6 +100,14 @@ The API will be available at `http://127.0.0.1:8000`
 
 ---
 
+## Model Files
+
+The trained ML models (`.pkl` files) are **not included** in this repository due to GitHub's 100MB file size limit.
+
+(You can directly reach out to the author for the same)
+
+---
+
 ## API Endpoints
 
 | Method | Endpoint | Description |
