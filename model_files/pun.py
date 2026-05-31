@@ -108,12 +108,12 @@ results["Random Forest"] = {"mae": mae, "r2": r2, "pipeline": pipe}
 #XGBoost
 print("\nXGBoost")
 pipe = make_pipeline(XGBRegressor(
-    n_estimators=1000,
+    n_estimators=2000,
     max_depth=8,
-    learning_rate=0.09,
-    subsample=0.8,
-    colsample_bytree=0.8,
-    min_child_weight=5,
+    learning_rate=0.12,
+    subsample=0.9,
+    colsample_bytree=0.9,
+    min_child_weight=8,
     objective="reg:squarederror",
     random_state=42
 ))
