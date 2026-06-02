@@ -11,7 +11,7 @@ from config import MODEL_PATHS, SUPPORTED_CITIES
 _models: dict = {}
 
 # X = df[["bhk", "area", "type", "region", "status", "age"]]
-FEATURE_COLUMNS = ["bhk", "area", "type", "region", "status", "age"]
+FEATURE_COLUMNS = ["bhk", "area", "type", "region", "status", "age"] # schema 
 
 
 def load_all_models():
