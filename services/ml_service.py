@@ -1,7 +1,6 @@
 """
-ml_service.py
 Loads all city models once at startup via joblib.
-predict_price_per_sqft() builds a DataFrame with columns in the EXACT same order as X during training: ["bhk", "area", "type", "region", "status", "age"]
+predict_price_per_sqft() builds a DataFrame with columns in the exact same order as X during training: ["bhk", "area", "type", "region", "status", "age"]
 """
 
 import joblib
@@ -9,7 +8,6 @@ import pandas as pd
 from pathlib import Path
 from config import MODEL_PATHS, SUPPORTED_CITIES
 
-#Global model store (populated once at startup) 
 _models: dict = {}
 
 # X = df[["bhk", "area", "type", "region", "status", "age"]]
@@ -45,7 +43,6 @@ def predict_price_per_sqft(city: str, features: dict) -> float:
     """
     model = get_model(city)
 
-# Build single-row DataFrame with columns in training order
     row = {col: [features[col]] for col in FEATURE_COLUMNS}
     df  = pd.DataFrame(row)
 
