@@ -121,10 +121,10 @@ pipe = make_pipeline(XGBRegressor(
 ))
 mae, r2, pipe = evaluate("XGBoost", pipe)
 results["XGBoost"] = {"mae": mae, "r2": r2, "pipeline": pipe}
-
-#Summary 
+#--------------------------------------------------------------------------------- 
 for name, res in results.items():
     print(f"  {name:<30}  {res['r2']:>8.4f}   ₹{res['mae']:.2f}")
+#--------------------------------------------------------------------------------
 
 #joblib.dump(results["Linear Regression"]["pipeline"], "models/bengaluru_price_model.pkl")
 #joblib.dump(results["Random Forest"]["pipeline"], "models/bengaluru_price_model.pkl")
