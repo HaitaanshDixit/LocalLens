@@ -12,7 +12,7 @@ import os
 import re
 import numpy as np
 import pandas as pd
-import faiss
+import faiss 
 import requests
 import pickle
 from pathlib import Path
@@ -21,7 +21,7 @@ from config import (RAG_DATA_PATHS, SUPPORTED_CITIES, GROQ_API_KEY,
                     LLM_MODEL, GROWTH_RATES, DATASET_AGE_YEARS)
 
 # Constants
-TOP_K        = 8
+TOP_K        = 8 # i'll try 9-12 vals further
 EMBED_MODEL  = "all-MiniLM-L6-v2"
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 INDEX_DIR    = Path("faiss_indexes")   # saved to LocalLens/faiss_indexes/
