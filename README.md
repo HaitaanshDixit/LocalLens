@@ -2,7 +2,7 @@
 
 > **Real estate price intelligence powered by machine learning and RAG**
 
-LocalLens is a full-stack platform that brings transparency to Indian real estate pricing. This repository contains the **backend** — a FastAPI server that serves ML-based price predictions, inflation-adjusted forecasts, and a conversational RAG chatbot grounded in real property data.
+LocalLens is a full-stack platform that brings transparency to Indian real estate pricing. This repository contains the **backend** : a FastAPI server that serves ML-based price predictions, inflation-adjusted forecasts, and a conversational RAG chatbot grounded in real property data.
 
 ---
 
@@ -10,18 +10,18 @@ LocalLens is a full-stack platform that brings transparency to Indian real estat
 
 LocalLens solves three real problems in the Indian housing market:
 
-1. **Price opacity** — No one knows what a property is *actually* worth. Brokers give estimates, listings are outdated, and buyers are flying blind.
-2. **Dataset staleness** — Public real estate data is very old. We apply rigorous inflation correction to make predictions relevant to today.
-3. **Inaccessible insights** — Most people can't interpret "₹22,000/sqft." Our RAG chatbot answers questions in plain English, grounded in real data.
+1. **Price opacity** : No one knows what a property is *actually* worth. Brokers give estimates, listings are outdated, and buyers are flying blind.
+2. **Dataset staleness** : Public real estate data is very old. We apply rigorous inflation correction to make predictions relevant to today.
+3. **Inaccessible insights** : Most people can't interpret "₹22,000/sqft." Our RAG chatbot answers questions in plain English, grounded in real data.
 
 ### What the backend provides:
 
--  **ML price prediction** — Random Forest and XGBoost models trained per city
--  **Inflation adjustment** — Compound growth for present market prices
--  **Future projection** — Project prices relevant to 3-5 years forward using verified growth rates
--  **RAG chatbot** — FAISS vector retrieval + Groq LLM for conversational queries
--  **Locality search** — Fetch all valid localities per city from cleaned datasets
--  **City comparison** — Side-by-side price rankings with automatic cheapest detection
+-  **ML price prediction** : Random Forest and XGBoost models trained per city
+-  **Inflation adjustment** : Compound growth for present market prices
+-  **Future projection** : Project prices relevant to 3-5 years forward using verified growth rates
+-  **RAG chatbot** : FAISS vector retrieval + Groq LLM for conversational queries
+-  **Locality search** : Fetch all valid localities per city from cleaned datasets
+-  **City comparison** :  Side-by-side price rankings with automatic cheapest detection
 
 ---
 
