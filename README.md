@@ -372,6 +372,6 @@ uvicorn main:app --reload --log-level debug
 
 ---
 
-🔗 **Upcoming Updates :** : JWT Auth, TTL Caching, Rate Limiter integeration, Pre-loading for better user experience and concurrency control.
+**Upcoming Updates :** JWT Auth, TTL Caching, Rate Limiter integeration, Pre-loading for better user experience and concurrency control.
 
 **Built at LNMIIT Jaipur**
