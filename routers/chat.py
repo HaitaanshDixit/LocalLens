@@ -22,13 +22,13 @@ router = APIRouter(prefix="/chat", tags=["RAG Chat"])
 
 @router.post("", response_model=ChatResponse)
 def chat(req: ChatRequest):
-    # 🔍 DEBUG INPUT
+    # debugging the input 
     print("QUERY:", req.query)
     print("CITY:", req.city)
 
     result = ask(query=req.query, active_city=req.city)
 
-    # 🔍 DEBUG OUTPUT
+    # debugging the output
     print("RAG RESULT:", result)
 
     return ChatResponse(**result)

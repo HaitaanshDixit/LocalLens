@@ -1,8 +1,3 @@
-"""
-Run:  uvicorn main:app --reload
-Docs: http://127.0.0.1:8000/docs
-"""
-
 from dotenv import load_dotenv
 load_dotenv()
 
