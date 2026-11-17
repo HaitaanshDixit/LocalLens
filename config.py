@@ -1,3 +1,4 @@
+"""
 import os
 from pathlib import Path
 
@@ -28,3 +29,53 @@ GROWTH_RATES = {
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 LLM_MODEL    = "openai/gpt-oss-120b"
+"""
+
+import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+
+MODEL_PATHS = {
+    "mumbai": BASE_DIR / "models" / "mumbai_price_model.pkl",
+    "bengaluru": BASE_DIR / "models" / "bengaluru_price_model.pkl",
+    "pune": BASE_DIR / "models" / "pune_price_model.pkl",
+}
+
+RAG_DATA_PATHS = {
+    "mumbai": BASE_DIR / "rag_dfs" / "mumbai_cleaned_dataset.csv",
+    "bengaluru": BASE_DIR / "rag_dfs" / "bengaluru_cleaned_dataset.csv",
+    "pune": BASE_DIR / "rag_dfs" / "pune_cleaned_dataset.csv",
+}
+
+SUPPORTED_CITIES = list(MODEL_PATHS.keys())
+
+DATASET_AGE_YEARS = 3
+
+GROWTH_RATES = {
+    "mumbai": 0.08,
+    "bengaluru": 0.12,
+    "pune": 0.06,
+}
+
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+LLM_MODEL = "openai/gpt-oss-120b"
+
+
+DATA_DIR = BASE_DIR / "data"
+DATABASE_URL = os.getenv(
+    "DATABASE_URL", f"sqlite:///{(DATA_DIR / 'locallens.db').as_posix()}"
+)
+
+
+# Generate one with: python -c "import secrets; print(secrets.token_urlsafe(48))"
+JWT_SECRET = os.getenv("JWT_SECRET", "")
+JWT_ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60"))
+
+
+CORS_ORIGINS = [
+    o.strip()
+    for o in os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
+    if o.strip()
+]
