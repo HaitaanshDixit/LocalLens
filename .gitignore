@@ -17,3 +17,6 @@ models/
 
 # FAISS indexes (auto-generated)
 faiss_indexes/
+
+data/
+.env
