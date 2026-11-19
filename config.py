@@ -50,6 +50,10 @@ RAG_DATA_PATHS = {
 
 SUPPORTED_CITIES = list(MODEL_PATHS.keys())
 
+# Cached FAISS indexes
+FAISS_INDEX_DIR = BASE_DIR / "faiss_indexes"
+
+# All 3 datasets are from 2022 -> inflated by 3 years to reach 2025
 DATASET_AGE_YEARS = 3
 
 GROWTH_RATES = {
@@ -61,19 +65,17 @@ GROWTH_RATES = {
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 LLM_MODEL = "openai/gpt-oss-120b"
 
-
 DATA_DIR = BASE_DIR / "data"
 DATABASE_URL = os.getenv(
     "DATABASE_URL", f"sqlite:///{(DATA_DIR / 'locallens.db').as_posix()}"
 )
-
 
 # Generate one with: python -c "import secrets; print(secrets.token_urlsafe(48))"
 JWT_SECRET = os.getenv("JWT_SECRET", "")
 JWT_ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60"))
 
-
+# Comma-separated list of allowed frontend origins
 CORS_ORIGINS = [
     o.strip()
     for o in os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
