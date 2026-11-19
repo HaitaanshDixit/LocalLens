@@ -30,6 +30,5 @@ def get_current_user(
     if user is None or not user.is_active:
         raise unauthorized
 
-    # Later steps (rate limiting, concurrency caps) key on this
     request.state.user_id = user.id
     return user
