@@ -25,3 +25,4 @@ bcrypt>=4.1
 SQLAlchemy>=2.0
 email-validator>=2.0
 filelock>=3.12
+cachetools>=5.3
