@@ -1,11 +1,67 @@
 """
+import joblib
+import pandas as pd
+from pathlib import Path
+from config import MODEL_PATHS, SUPPORTED_CITIES
+
+_models: dict = {}
+
+# X = df[["bhk", "area", "type", "region", "status", "age"]]
+FEATURE_COLUMNS = ["bhk", "area", "type", "region", "status", "age"] # schema 
+
+
+def load_all_models():
+    for city in SUPPORTED_CITIES:
+        path: Path = MODEL_PATHS[city]
+        if not path.exists():
+            raise FileNotFoundError(
+                f"Model not found for '{city}' at: {path}\n"
+                "Make sure the models/ folder is at the project root."
+            )
+        _models[city] = joblib.load(path) 
+        print(f"[ML] Loaded model for '{city}' ✓")
+
+
+def get_model(city: str):
+    if city not in _models:
+        raise KeyError(f"Model for '{city}' not loaded. Was load_all_models() called?")
+    return _models[city]
+
+
+def predict_price_per_sqft(city: str, features: dict) -> float:
+    """"""
+    features dict must contain these keys:
+        bhk (int), area (float),
+        type (str), region (str), status (str), age (str)
+
+    Returns predicted price_per_sqft as ₹/sqft.
+    """"""
+    model = get_model(city)
+
+    row = {col: [features[col]] for col in FEATURE_COLUMNS}
+    df  = pd.DataFrame(row)
+
+    result = model.predict(df)
+    return round(float(result[0]), 2)
+"""
+
+"""
 Loads all city models once at startup via joblib.
 predict_price_per_sqft() builds a DataFrame with columns in the exact same order as X during training: ["bhk", "area", "type", "region", "status", "age"]
 """
 
+
+"""
+Loads all city models once at startup via joblib.
+predict_price_per_sqft() builds a DataFrame with columns in the exact same order as X during training: ["bhk", "area", "type", "region", "status", "age"]
+"""
+
+import time
+
 import joblib
 import pandas as pd
 from pathlib import Path
+from cache import get_or_compute, predict_store
 from config import MODEL_PATHS, SUPPORTED_CITIES
 
 _models: dict = {}
@@ -23,8 +79,13 @@ def load_all_models():
                 f"Model not found for '{city}' at: {path}\n"
                 "Make sure the models/ folder is at the project root."
             )
+        t = time.perf_counter()
         _models[city] = joblib.load(path) 
-        print(f"[ML] Loaded model for '{city}' ✓")
+        print(f"[ML] Loaded model for '{city}' in {time.perf_counter() - t:.2f}s ✓")
+
+
+def get_status() -> dict:
+    return {city: city in _models for city in SUPPORTED_CITIES}
 
 
 def get_model(city: str):
@@ -48,3 +109,14 @@ def predict_price_per_sqft(city: str, features: dict) -> float:
 
     result = model.predict(df)
     return round(float(result[0]), 2)
+
+
+def predict_price_per_sqft_cached(city: str, features: dict):
+    """
+    Same as predict_price_per_sqft, but memoised.
+    Returns (price_per_sqft, cache_hit). Errors are never cached.
+    """
+    key = (city, *(features[col] for col in FEATURE_COLUMNS))
+    return get_or_compute(
+        predict_store, key, lambda: predict_price_per_sqft(city, features)
+    )
