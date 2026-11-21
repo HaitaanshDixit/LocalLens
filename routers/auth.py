@@ -3,6 +3,8 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from ratelimit import rate_limit_ip
+
 import config
 from auth_schemas import LoginRequest, RegisterRequest, TokenResponse, UserOut
 from database import get_db
@@ -18,7 +20,12 @@ from security import (
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
-@router.post("/register", response_model=UserOut, status_code=status.HTTP_201_CREATED)
+@router.post(
+        "/register",
+        response_model=UserOut,
+        status_code=status.HTTP_201_CREATED,
+        dependencies=[Depends(rate_limit_ip("register", config.RATE_LIMIT_REGISTER_IP))],
+    )
 def register(body: RegisterRequest, db: Session = Depends(get_db)):
     email = body.email.lower()
     conflict = HTTPException(
@@ -40,7 +47,11 @@ def register(body: RegisterRequest, db: Session = Depends(get_db)):
     return user
 
 
-@router.post("/login", response_model=TokenResponse)
+@router.post(
+        "/login",
+        response_model=TokenResponse,
+        dependencies=[Depends(rate_limit_ip("login", config.RATE_LIMIT_LOGIN_IP))],
+    )
 def login(body: LoginRequest, db: Session = Depends(get_db)):
     invalid = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
