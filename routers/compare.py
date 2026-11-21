@@ -1,14 +1,15 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Response
 from schemas import CompareRequest, CompareResponse, PredictResponse
-from services.ml_service import predict_price_per_sqft
+from services.ml_service import predict_price_per_sqft_cached
 from config import GROWTH_RATES, DATASET_AGE_YEARS
 
 router = APIRouter(prefix="/compare", tags=["Compare"])
 
 
 @router.post("", response_model=CompareResponse)
-def compare(req: CompareRequest):
+def compare(req: CompareRequest, response: Response):
     results: list[PredictResponse] = []
+    hits: list[bool] = []
 
     for city in req.cities:
         features = {
@@ -20,12 +21,13 @@ def compare(req: CompareRequest):
             "age":    req.age,
         }
         try:
-            raw_pps = predict_price_per_sqft(city, features)
+            raw_pps, cache_hit = predict_price_per_sqft_cached(city, features)
         except Exception as e:
             raise HTTPException(
                 status_code=500,
                 detail=f"Prediction failed for '{city}': {str(e)}"
             )
+        hits.append(cache_hit)
 
         growth_rate       = GROWTH_RATES.get(city, 0.08)
         current_pps       = raw_pps * ((1 + growth_rate) ** DATASET_AGE_YEARS)
@@ -42,6 +44,14 @@ def compare(req: CompareRequest):
             growth_rate_used        = growth_rate,
             inflation_years_applied = DATASET_AGE_YEARS,
         ))
+
+    # HIT = every city came from cache, MISS = none did, PARTIAL = a mix
+    if all(hits):
+        response.headers["X-Cache"] = "HIT"
+    elif not any(hits):
+        response.headers["X-Cache"] = "MISS"
+    else:
+        response.headers["X-Cache"] = "PARTIAL"
 
     sorted_results   = sorted(results, key=lambda r: r.current_total_price_inr)
     cheapest         = sorted_results[0]
