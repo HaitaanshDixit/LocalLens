@@ -1,13 +1,13 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Response
 from schemas import PredictRequest, PredictResponse
-from services.ml_service import predict_price_per_sqft
+from services.ml_service import predict_price_per_sqft_cached
 from config import GROWTH_RATES, DATASET_AGE_YEARS
 
 router = APIRouter(prefix="/predict", tags=["Prediction"])
 
 
 @router.post("", response_model=PredictResponse)
-def predict(req: PredictRequest):
+def predict(req: PredictRequest, response: Response):
     features = {
         "bhk":    req.bhk,
         "area":   req.area,
@@ -17,9 +17,11 @@ def predict(req: PredictRequest):
         "age":    req.age,
     }
     try:
-        raw_pps = predict_price_per_sqft(req.city, features)
+        raw_pps, cache_hit = predict_price_per_sqft_cached(req.city, features)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+    response.headers["X-Cache"] = "HIT" if cache_hit else "MISS"
 
     growth_rate = GROWTH_RATES.get(req.city, 0.08)
 
