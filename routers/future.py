@@ -18,6 +18,8 @@ def future_price(req: FutureRequest, response: Response):
     }
     try:
         raw_pps, cache_hit = predict_price_per_sqft_cached(req.city, features)
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
