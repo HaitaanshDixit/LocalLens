@@ -22,6 +22,8 @@ def compare(req: CompareRequest, response: Response):
         }
         try:
             raw_pps, cache_hit = predict_price_per_sqft_cached(city, features)
+        except HTTPException:
+            raise
         except Exception as e:
             raise HTTPException(
                 status_code=500,
